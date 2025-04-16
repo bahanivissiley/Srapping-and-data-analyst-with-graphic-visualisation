@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hockey Analyzer - Analyse de performances des équipes</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS personnalisé -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+</head>
+<body>
+    <!-- Header avec animation -->
+    <header class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 text-center">
+                    <div class="hero-content">
+                        <h1 class="display-3 mb-4 text-light fw-bold">
+                            <span class="text-highlight">Hockey</span> Analyzer
+                        </h1>
+                        <p class="lead text-light mb-5">Analysez les performances historiques des équipes de hockey avec notre outil interactif.</p>
+                        
+                        <!-- Formulaire de recherche -->
+                        <div class="search-container">
+                            <form id="search-form" action="{{ url_for('search') }}" method="post">
+                                <div class="input-group mb-3">
+                                    <input 
+                                        type="text" 
+                                        id="team-search" 
+                                        name="team_name" 
+                                        class="form-control form-control-lg" 
+                                        placeholder="Rechercher une équipe de hockey..." 
+                                        autocomplete="off" 
+                                        required
+                                    >
+                                    <button class="btn btn-primary btn-lg" type="submit">
+                                        <i class="fas fa-search"></i> Analyser
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <!-- Équipes populaires -->
+                            <div class="popular-teams mt-3">
+                                <p class="text-light mb-2">Équipes populaires:</p>
+                                <div class="d-flex flex-wrap justify-content-center">
+                                    <a href="#" class="team-pill" data-team="Montreal Canadiens">Montreal Canadiens</a>
+                                    <a href="#" class="team-pill" data-team="Toronto Maple Leafs">Toronto Maple Leafs</a>
+                                    <a href="#" class="team-pill" data-team="Boston Bruins">Boston Bruins</a>
+                                    <a href="#" class="team-pill" data-team="New York Rangers">New York Rangers</a>
+                                    <a href="#" class="team-pill" data-team="Pittsburgh Penguins">Pittsburgh Penguins</a>
+                                </div>
+                            </div>
+                            
+                            <!-- Message d'erreur -->
+                            {% if error %}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                {{ error }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="shape-divider">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main>
+        <section class="features py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Fonctionnalités d'analyse avancées</h2>
+                <div class="row g-4">
+                    <div class="feature-card col-md-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3 class="card-title">Tendances historiques</h3>
+                                <p class="card-text">Visualisez l'évolution des performances d'une équipe au fil des saisons avec des graphiques interactifs.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card col-md-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <h3 class="card-title">Analyses statistiques</h3>
+                                <p class="card-text">Découvrez des corrélations entre différentes métriques comme les victoires, les buts marqués et encaissés.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card col-md-4">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <h3 class="card-title">Comparaison d'équipes</h3>
+                                <p class="card-text">Comparez les performances de plusieurs équipes sur une même période pour identifier les forces et faiblesses.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="how-it-works py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Comment ça marche</h2>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="steps">
+                            <div class="step d-flex">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Recherchez une équipe</h4>
+                                    <p>Entrez le nom d'une équipe de hockey dans le champ de recherche pour commencer l'analyse.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step d-flex">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Collecte des données</h4>
+                                    <p>Notre système récupère automatiquement les données historiques de l'équipe depuis notre source.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step d-flex">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Analyse avancée</h4>
+                                    <p>Les données sont traitées pour générer des statistiques, des corrélations et des visualisations pertinentes.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step d-flex">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h4>Visualisation interactive</h4>
+                                    <p>Explorez les résultats avec des graphiques interactifs et des tableaux de bord personnalisables.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="comparison-section py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="mb-4">Comparaison multi-équipes</h2>
+                        <p class="lead">Comparez jusqu'à 5 équipes simultanément pour une analyse comparative approfondie.</p>
+                        <p>Notre outil vous permet de visualiser comment différentes équipes se mesurent les unes aux autres sur diverses métriques comme le pourcentage de victoires, les buts marqués, et bien plus encore.</p>
+                        <button class="btn btn-outline-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#compareModal">
+                            <i class="fas fa-balance-scale me-2"></i> Comparer des équipes
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="{{ url_for('static', filename='img/comparison.svg') }}" class="img-fluid rounded shadow-lg" alt="Comparaison d'équipes">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modal de comparaison -->
+    <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="compareModalLabel">Comparer des équipes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="compare-form">
+                        <p>Sélectionnez 2 à 5 équipes à comparer:</p>
+                        
+                        <div class="mb-3">
+                            <select id="team-select" class="form-select mb-2" multiple data-placeholder="Choisir des équipes...">
+                                <!-- Les options seront chargées dynamiquement -->
+                            </select>
+                            <div class="form-text">Utilisez Ctrl+clic (ou Cmd+clic sur Mac) pour sélectionner plusieurs équipes.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="metric-select" class="form-label">Métrique à comparer:</label>
+                            <select id="metric-select" class="form-select">
+                                <option value="Win %" selected>Pourcentage de victoires</option>
+                                <option value="Wins">Victoires</option>
+                                <option value="Goals For (GF)">Buts marqués</option>
+                                <option value="Goals Against (GA)">Buts encaissés</option>
+                                <option value="Goal Difference">Différence de buts</option>
+                            </select>
+                        </div>
+                    </form>
+                    
+                    <div id="comparison-chart-container" class="mt-4 d-none">
+                        <div id="comparison-chart" style="height: 400px;"></div>
+                    </div>
+                    
+                    <div id="comparison-loading" class="text-center my-4 d-none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                        <p class="mt-2">Récupération des données en cours...</p>
+                    </div>
+                    
+                    <div id="comparison-error" class="alert alert-danger mt-3 d-none" role="alert">
+                        Une erreur s'est produite lors de la comparaison des équipes.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" id="compare-button" class="btn btn-primary">Comparer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start">
+                    &copy; 2023 Hockey Analyzer
+                </div>
+                <div class="col-lg-4 text-lg-center">
+                    <a href="#" class="link-dark text-decoration-none me-3">Conditions d'utilisation</a>
+                    <a href="#" class="link-dark text-decoration-none">Confidentialité</a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="#" class="link-dark text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="link-dark text-decoration-none me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="link-dark text-decoration-none"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- jQuery, jQuery UI et Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Plotly pour les graphiques -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <!-- JavaScript personnalisé -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

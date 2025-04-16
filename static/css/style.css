@@ -1,0 +1,516 @@
+/* ===== VARIABLES ===== */
+:root {
+    --primary-color: #0066cc;
+    --secondary-color: #ff9900;
+    --dark-color: #333333;
+    --light-color: #f5f5f5;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --text-color: #333333;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.text-highlight {
+    color: var(--secondary-color);
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+/* ===== HERO BANNER ===== */
+.hero-banner {
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../img/hockey-banner.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 2rem 0;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+}
+
+.hero-banner h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+}
+
+.hero-banner .lead {
+    font-size: 1.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.search-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Shape divider */
+.shape-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.shape-divider svg {
+    position: relative;
+    display: block;
+    width: calc(140% + 1.3px);
+    height: 65px;
+}
+
+.shape-divider .shape-fill {
+    fill: #FFFFFF;
+}
+
+/* ===== FEATURES SECTION ===== */
+.features {
+    padding: 5rem 0;
+}
+
+.feature-card {
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.feature-card .card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    height: 100%;
+    transition: var(--transition);
+}
+
+.feature-card .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card .card-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* ===== HOW IT WORKS SECTION ===== */
+.how-it-works {
+    background-color: var(--light-color);
+    padding: 5rem 0;
+}
+
+.steps {
+    position: relative;
+}
+
+.step {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex-grow: 1;
+}
+
+.step-content h4 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 25px;
+    width: 2px;
+    height: calc(100% - 25px);
+    background-color: var(--primary-color);
+    opacity: 0.3;
+}
+
+/* ===== COMPARISON SECTION ===== */
+.comparison-section {
+    padding: 5rem 0;
+}
+
+/* ===== SEARCH & AUTOCOMPLETE ===== */
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    z-index: 1000;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper {
+    padding: 8px 16px;
+}
+
+.ui-autocomplete .ui-state-active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* ===== TEAM PILLS ===== */
+.popular-teams {
+    margin-top: 1.5rem;
+}
+
+.team-pill {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 30px;
+    margin: 0.25rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.team-pill:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ===== RESULTS PAGE ===== */
+.results-page {
+    padding-top: 0;
+}
+
+.results-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding-bottom: 1rem;
+}
+
+.navbar {
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.team-banner {
+    padding: 2rem 0;
+}
+
+.team-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.team-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* ===== STATS CARDS ===== */
+.best-season-details,
+.worst-season-details {
+    text-align: center;
+}
+
+.season-year {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.season-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.season-goals {
+    display: flex;
+    justify-content: space-around;
+}
+
+.goals-for,
+.goals-against {
+    text-align: center;
+}
+
+.goals-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.goals-for .goals-value {
+    color: var(--success-color);
+}
+
+.goals-against .goals-value {
+    color: var(--danger-color);
+}
+
+.goals-label {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* ===== PERFORMANCE TREND CARD ===== */
+.performance-trend-card {
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.performance-trend-card h4 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* ===== CORRELATION CARDS ===== */
+.correlation-card {
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: var(--box-shadow);
+}
+
+.correlation-card h4 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.correlation-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.correlation-interpretation {
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.graph-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 2rem;
+}
+
+.graph-container h4 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.plotly-chart {
+    height: 400px;
+    width: 100%;
+}
+
+/* ===== COMPARE FORM ===== */
+.compare-form-container {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 992px) {
+    .hero-banner h1 {
+        font-size: 2.8rem;
+    }
+    
+    .hero-banner .lead {
+        font-size: 1.2rem;
+    }
+    
+    .step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .step:not(:last-child)::after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-banner {
+        min-height: 500px;
+    }
+    
+    .hero-banner h1 {
+        font-size: 2.5rem;
+    }
+    
+    .season-stats {
+        flex-direction: column;
+    }
+    
+    .stat-item {
+        margin-bottom: 1rem;
+    }
+    
+    .plotly-chart {
+        height: 300px;
+    }
+    
+    .team-name {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-banner h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-banner .lead {
+        font-size: 1rem;
+    }
+    
+    .team-pill {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.hero-content {
+    animation: fadeIn 1s ease-out;
+}
+
+.search-container {
+    animation: slideInUp 1s ease-out 0.3s both;
+}

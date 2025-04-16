@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dashboard_data.team_name }} - Analyse détaillée | Hockey Analyzer</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS personnalisé -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="results-page">
+    <!-- Header avec menu de navigation -->
+    <header class="results-header">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <span class="text-highlight">Hockey</span> Analyzer
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#overview">Vue d'ensemble</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#trends">Tendances</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#correlations">Corrélations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#stats">Statistiques</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex ms-auto" action="{{ url_for('search') }}" method="post">
+                        <div class="input-group">
+                            <input type="text" name="team_name" class="form-control" placeholder="Rechercher une équipe..." required>
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Bannière d'équipe -->
+        <div class="team-banner">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="team-name">{{ dashboard_data.team_name }}</h1>
+                        <p class="team-subtitle">Analyse des performances historiques</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="{{ url_for('download_csv', team_name=team_name) }}" class="btn btn-outline-light">
+                            <i class="fas fa-download me-2"></i> Télécharger les données (CSV)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main class="pt-4">
+        <div class="container">
+            <!-- Vue d'ensemble -->
+            <section id="overview" class="mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="section-title">Vue d'ensemble</h2>
+                        
+                        <div class="row mt-4">
+                            <!-- Meilleure saison -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-trophy me-2"></i> Meilleure saison
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="best-season-details">
+                                            <div class="season-year">{{ dashboard_data.best_season.Year }}</div>
+                                            <div class="season-stats">
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.best_season.Wins }}</div>
+                                                    <div class="stat-label">Victoires</div>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.best_season.Losses }}</div>
+                                                    <div class="stat-label">Défaites</div>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.best_season['Win %']|round(3) }}</div>
+                                                    <div class="stat-label">Win %</div>
+                                                </div>
+                                            </div>
+                                            <div class="season-goals">
+                                                <div class="goals-for">
+                                                    <div class="goals-value">{{ dashboard_data.best_season['Goals For (GF)'] }}</div>
+                                                    <div class="goals-label">Buts marqués</div>
+                                                </div>
+                                                <div class="goals-against">
+                                                    <div class="goals-value">{{ dashboard_data.best_season['Goals Against (GA)'] }}</div>
+                                                    <div class="goals-label">Buts encaissés</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pire saison -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-danger">
+                                    <div class="card-header bg-danger text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-thumbs-down me-2"></i> Pire saison
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="worst-season-details">
+                                            <div class="season-year">{{ dashboard_data.worst_season.Year }}</div>
+                                            <div class="season-stats">
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.worst_season.Wins }}</div>
+                                                    <div class="stat-label">Victoires</div>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.worst_season.Losses }}</div>
+                                                    <div class="stat-label">Défaites</div>
+                                                </div>
+                                                <div class="stat-item">
+                                                    <div class="stat-value">{{ dashboard_data.worst_season['Win %']|round(3) }}</div>
+                                                    <div class="stat-label">Win %</div>
+                                                </div>
+                                            </div>
+                                            <div class="season-goals">
+                                                <div class="goals-for">
+                                                    <div class="goals-value">{{ dashboard_data.worst_season['Goals For (GF)'] }}</div>
+                                                    <div class="goals-label">Buts marqués</div>
+                                                </div>
+                                                <div class="goals-against">
+                                                    <div class="goals-value">{{ dashboard_data.worst_season['Goals Against (GA)'] }}</div>
+                                                    <div class="goals-label">Buts encaissés</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="performance-trend-card">
+                                    <h4>Tendance de performance</h4>
+                                    <p>
+                                        La performance de l'équipe est <strong>{{ dashboard_data.performance_trend.trend }}</strong> au fil des saisons.
+                                        {% if dashboard_data.performance_trend.slope > 0 %}
+                                            Le pourcentage de victoires augmente en moyenne de {{ (dashboard_data.performance_trend.slope * 100)|round(2) }}% par saison.
+                                        {% elif dashboard_data.performance_trend.slope < 0 %}
+                                            Le pourcentage de victoires diminue en moyenne de {{ (dashboard_data.performance_trend.slope * -100)|round(2) }}% par saison.
+                                        {% else %}
+                                            La performance reste stable au fil des saisons.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tendances -->
+            <section id="trends" class="mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="section-title">Tendances historiques</h2>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-4">
+                                <div class="graph-container">
+                                    <h4>Évolution des victoires</h4>
+                                    <div id="wins-evolution-chart" class="plotly-chart"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="graph-container">
+                                    <h4>Comparaison des buts</h4>
+                                    <div id="goals-comparison-chart" class="plotly-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="graph-container">
+                                    <h4>Performance par saison</h4>
+                                    <div id="performance-table" class="plotly-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Corrélations -->
+            <section id="correlations" class="mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="section-title">Analyse des corrélations</h2>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="correlation-card">
+                                    <h4>Victoires vs Buts marqués</h4>
+                                    <div class="correlation-value">
+                                        r = {{ dashboard_data.correlations.Wins_vs_GoalsFor.correlation|round(3) }}
+                                    </div>
+                                    <div class="correlation-interpretation">
+                                        {{ dashboard_data.correlations.Wins_vs_GoalsFor.interpretation }}
+                                    </div>
+                                    <p class="correlation-explanation">
+                                        {% if dashboard_data.correlations.Wins_vs_GoalsFor.correlation > 0.7 %}
+                                            La forte corrélation positive montre que le nombre de victoires augmente significativement avec le nombre de buts marqués.
+                                        {% elif dashboard_data.correlations.Wins_vs_GoalsFor.correlation > 0.3 %}
+                                            Il existe une relation positive modérée entre les buts marqués et le nombre de victoires.
+                                        {% else %}
+                                            La relation entre les buts marqués et les victoires est relativement faible pour cette équipe.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="correlation-card">
+                                    <h4>% de victoires vs Buts encaissés</h4>
+                                    <div class="correlation-value">
+                                        r = {{ dashboard_data.correlations.WinPct_vs_GoalsAgainst.correlation|round(3) }}
+                                    </div>
+                                    <div class="correlation-interpretation">
+                                        {{ dashboard_data.correlations.WinPct_vs_GoalsAgainst.interpretation }}
+                                    </div>
+                                    <p class="correlation-explanation">
+                                        {% if dashboard_data.correlations.WinPct_vs_GoalsAgainst.correlation < -0.7 %}
+                                            La forte corrélation négative indique que le pourcentage de victoires diminue considérablement lorsque l'équipe encaisse plus de buts.
+                                        {% elif dashboard_data.correlations.WinPct_vs_GoalsAgainst.correlation < -0.3 %}
+                                            Il existe une relation négative modérée entre les buts encaissés et le pourcentage de victoires.
+                                        {% else %}
+                                            La relation entre les buts encaissés et le pourcentage de victoires est moins prononcée pour cette équipe.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="graph-container">
+                                    <h4>Relation entre buts marqués et % de victoires</h4>
+                                    <div id="scatter-plot" class="plotly-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Statistiques -->
+            <section id="stats" class="mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="section-title">Statistiques descriptives</h2>
+                        
+                        <div class="table-responsive mt-4">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Métrique</th>
+                                        <th>Moyenne</th>
+                                        <th>Médiane</th>
+                                        <th>Écart-type</th>
+                                        <th>Minimum</th>
+                                        <th>Maximum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for metric, values in dashboard_data.basic_stats.items() %}
+                                    <tr>
+                                        <td>{{ metric }}</td>
+                                        <td>{{ values.mean|round(2) }}</td>
+                                        <td>{{ values.median|round(2) }}</td>
+                                        <td>{{ values.std|round(2) }}</td>
+                                        <td>{{ values.min|round(2) }}</td>
+                                        <td>{{ values.max|round(2) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section de comparaison -->
+            <section class="mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="section-title">Comparer avec d'autres équipes</h2>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6 mx-auto">
+                                <div class="compare-form-container text-center">
+                                    <p>Voyez comment {{ dashboard_data.team_name }} se compare à d'autres équipes.</p>
+                                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#compareModal">
+                                        <i class="fas fa-balance-scale me-2"></i> Comparer avec d'autres équipes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Modal de comparaison (identique à celle de index.html) -->
+    <div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="compareModalLabel">Comparer des équipes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="compare-form">
+                        <p>Sélectionnez 2 à 5 équipes à comparer:</p>
+                        
+                        <div class="mb-3">
+                            <select id="team-select" class="form-select mb-2" multiple data-placeholder="Choisir des équipes...">
+                                <!-- Les options seront chargées dynamiquement -->
+                                <option value="{{ team_name }}" selected>{{ team_name }}</option>
+                            </select>
+                            <div class="form-text">Utilisez Ctrl+clic (ou Cmd+clic sur Mac) pour sélectionner plusieurs équipes.</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="metric-select" class="form-label">Métrique à comparer:</label>
+                            <select id="metric-select" class="form-select">
+                                <option value="Win %" selected>Pourcentage de victoires</option>
+                                <option value="Wins">Victoires</option>
+                                <option value="Goals For (GF)">Buts marqués</option>
+                                <option value="Goals Against (GA)">Buts encaissés</option>
+                                <option value="Goal Difference">Différence de buts</option>
+                            </select>
+                        </div>
+                    </form>
+                    
+                    <div id="comparison-chart-container" class="mt-4 d-none">
+                        <div id="comparison-chart" style="height: 400px;"></div>
+                    </div>
+                    
+                    <div id="comparison-loading" class="text-center my-4 d-none">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                        <p class="mt-2">Récupération des données en cours...</p>
+                    </div>
+                    
+                    <div id="comparison-error" class="alert alert-danger mt-3 d-none" role="alert">
+                        Une erreur s'est produite lors de la comparaison des équipes.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" id="compare-button" class="btn btn-primary">Comparer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-lg-start">
+                    &copy; 2023 Hockey Analyzer
+                </div>
+                <div class="col-lg-4 text-lg-center">
+                    <a href="#" class="link-dark text-decoration-none me-3">Conditions d'utilisation</a>
+                    <a href="#" class="link-dark text-decoration-none">Confidentialité</a>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="#" class="link-dark text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="link-dark text-decoration-none me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="link-dark text-decoration-none"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Team data for JavaScript -->
+    <script>
+        const teamData = {{ dashboard_data|tojson }};
+    </script>
+    
+    <!-- jQuery, jQuery UI et Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Plotly pour les graphiques -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <!-- JavaScript personnalisé -->
+    <script src="{{ url_for('static', filename='js/results.js') }}"></script>
+</body>
+</html>
